@@ -1,0 +1,60 @@
+<div class="box">
+  <div class="field has-addons has-addons-centered is-marginless">
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="slow down"
+              (click)="send.emit('slowDown')">
+        <fa-icon [icon]="['fas', 'backward']"></fa-icon>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" [ngClass]="isRunning ? 'green' : 'red'" class="button"
+              title="play" (click)="send.emit('play')">
+        <fa-icon *ngIf="isRunning" [icon]="['fas', 'stop']"></fa-icon>
+        <fa-icon *ngIf="!isRunning" [icon]="['fas', 'play']"></fa-icon>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="clear grid"
+              (click)="send.emit('redoSession')">
+        <fa-icon [icon]="['fas', 'redo']"></fa-icon>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="next step"
+              (click)="send.emit('nextStep')">
+        <fa-icon [icon]="['fas', 'step-forward']"></fa-icon>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="speed up" (click)="send.emit('speedUp')">
+        <fa-icon [icon]="['fas', 'forward']"></fa-icon>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" (click)="send.emit('randomSeed')">
+        <span class="icon">
+          <fa-icon [icon]="['fas', 'random']"></fa-icon>
+        </span>
+        <b>Random</b>
+      </button>
+    </p>
+  </div>
+  <div class="field has-addons has-addons-centered is-marginless">
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" (click)="send.emit('importSession')">
+        <span class="icon">
+          <fa-icon [icon]="['far', 'edit']"></fa-icon>
+        </span>
+        <b>Import</b>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="mainComponent !== 'gamePage'" class="button" (click)="send.emit('exportSession')">
+        <span class="icon">
+          <fa-icon [icon]="['far', 'save']"></fa-icon>
+        </span>
+        <b>Export</b>
+      </button>
+    </p>
+  </div>
+</div>

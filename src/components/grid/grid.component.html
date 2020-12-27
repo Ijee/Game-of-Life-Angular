@@ -1,0 +1,16 @@
+<app-stats class="box" [current-tick]="currentTick"
+           [cell-count]="cellCount"
+           [cells-alive]="cellsAlive"
+           [cells-created]="cellsCreated"
+           [current-speed]="currentSpeed"></app-stats>
+<div class="game-grid columns"
+     (mousedown)="isMouseDown = true"
+     (mouseup)="isMouseDown = false"
+     (mouseleave)="isMouseDown = false">
+  <div *ngFor="let col of gridList" class="game-column">
+    <app-cell *ngFor="let isAlive of col"
+              [status-obj]="isAlive"
+              [is-mouse-down]="isMouseDown"
+              (wasUpdated)="updateCellCount($event)"></app-cell>
+  </div>
+</div>

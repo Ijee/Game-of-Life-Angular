@@ -1,0 +1,148 @@
+<div class="GOL">
+  <section class="hero primary-background is-fullheight">
+    <!-- Bulma - Hero head -->
+    <div class="hero-head">
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item" style="color: #fff">
+              <span class="icon">
+                <fa-icon [icon]="['fas', 'heartbeat']"></fa-icon>
+              </span>
+              <span><strong>GAME OF LIFE</strong></span>
+            </a>
+            <span [ngClass]="{'is-active': isNavbar}"
+                  class="navbar-burger burger"
+                  data-target="navbarMenuHeroA"
+                  (click)="isNavbar = !isNavbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+          <div id="navbarMenuHeroA" [ngClass]="{ 'is-active': isNavbar }" class="navbar-menu">
+            <div class="navbar-end">
+              <a class="navbar-item" (click)="swapComponent('gamePage')">
+                <span class="icon">
+                  <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
+                </span>
+                <span>GAME</span>
+              </a>
+              <a class="navbar-item" (click)="swapComponent('infoPage')">
+                <span class="icon">
+                  <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                </span>
+                <span>INFO</span>
+              </a>
+              <span class="navbar-item">
+                <a class="button is-info"
+                   href="https://github.com/Ijee/Game-of-Life-Vue"
+                   target="_blank"
+                   rel="noopener">
+                  <span class="icon">
+                    <fa-icon [icon]="['fab', 'github']"></fa-icon>
+                  </span>
+                  <span>Ijee</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <!-- Bulma - Hero content -->
+    <div class="hero-body">
+      <div class="container is-paddingless">
+        <div class="columns box is-fullwidth is-gapless">
+          <div class="column is-12">
+            <app-grid [style.display]="mainComponent === 'gamePage' ? '' : 'none'"
+                      [message]="message"
+                      [import-token]="importToken"
+                      [current-speed]="speed"
+                      (exportToken)="exportSession($event)"></app-grid>
+            <app-info [style.display]="mainComponent === 'infoPage' ? '' : 'none'"></app-info>
+          </div>
+        </div>
+        <!-- Bulma - Notification -->
+        <div *ngIf="isExport" class="columns">
+          <div class="column is-6 is-offset-3">
+            <div class="notification">
+              <h6 class="title is-6">
+                <fa-icon [icon]="['far', 'save']"></fa-icon>
+                Export
+              </h6>
+              <button class="delete" (click)="isExport = false"></button>
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  <input id="copystring"
+                         [(ngModel)]="exportToken"
+                         type="text"
+                         class="input is-info is-rounded"
+                         (focus)="$event.target.select()">
+                </div>
+                <div class="control">
+                  <a class="button is-dark" (click)="toClipboard()">
+                    <fa-icon [icon]="['fas', 'paste']"></fa-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bulma - Hero footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-fullwidth">
+            <app-controller [is-running]="isRunning"
+                            [main-component]="mainComponent"
+                            (send)="delegate($event)"></app-controller>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Bulma - Modal -->
+    <div *ngIf="isImport" [ngClass]="isImport ? 'is-active' : 'inactive'" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <span class="icon">
+              <fa-icon [icon]="['far', 'edit']"></fa-icon>
+            </span>
+            <b>Import</b>
+          </p>
+          <button class="delete" aria-label="close" (click)="isImport = false"></button>
+        </header>
+        <section class="modal-card-body">
+              <textarea [(ngModel)]="importToken"
+                        class="textarea is-primary"
+                        type="text"
+                        placeholder="Paste here"></textarea>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" (click)="importSession()">Import</button>
+          <button class="button" (click)="isImport = false">Cancel</button>
+          <div class="field">
+            <p class="control has-icons-left">
+              <span class="select">
+                <select [ngModel]="selectedScenario" (ngModelChange)="scenarioSelected($event)">
+                  <option value="scenario" selected>Scenario</option>
+                  <option value="gosper">Gosper glider gun</option>
+                  <option value="multiple">Multiple patterns</option>
+                  <option value="chess">Chess board</option>
+                  <option value="mandala">Mandala</option>
+                </select>
+              </span>
+              <span class="icon is-small is-left">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+              </span>
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </section>
+</div>
