@@ -1,0 +1,226 @@
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
+import {Alive} from '../../../types';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GameService {
+  private readonly gridList$: ReplaySubject<Alive[][]>;
+  private readonly tick$: BehaviorSubject<number>;
+  private readonly cellCount$: BehaviorSubject<number>;
+  private readonly cellsAlive$: BehaviorSubject<number>;
+  private readonly cellsCreated$: BehaviorSubject<number>;
+  private readonly gameSpeed$: BehaviorSubject<number>;
+  private readonly isGameActive$: BehaviorSubject<boolean>;
+  private readonly backwardStep$: Subject<void>;
+  private readonly backwardStepsAmount$: BehaviorSubject<number>;
+  private readonly step$: Subject<void>;
+  private readonly redo$: Subject<void>;
+  private readonly randomSeed$: Subject<void>;
+  private readonly importSession$: Subject<void>;
+  private readonly exportSession$: Subject<void>;
+  private readonly exportToken$: Subject<string>;
+  private readonly importToken$: Subject<string>;
+
+  private intervalID: number;
+
+  constructor() {
+    this.gridList$ = new ReplaySubject<Alive[][]>(5);
+    this.gridList$.next([]);
+    this.tick$ = new BehaviorSubject<number>(0);
+    this.cellCount$ = new BehaviorSubject<number>(0);
+    this.cellsAlive$ = new BehaviorSubject<number>(0);
+    this.cellsCreated$ = new BehaviorSubject<number>(0);
+    this.gameSpeed$ = new BehaviorSubject(100);
+    this.isGameActive$ = new BehaviorSubject(false);
+    this.backwardStep$ = new Subject<void>();
+    this.backwardStepsAmount$ = new BehaviorSubject<number>(0);
+    this.step$ = new Subject<void>();
+    this.redo$ = new Subject<void>();
+    this.randomSeed$ = new Subject<void>();
+    this.importSession$ = new Subject<void>();
+    this.exportSession$ = new Subject<void>();
+    this.exportToken$ = new Subject<string>();
+    this.importToken$ = new Subject<string>();
+  }
+
+  /**
+   * Restarts the current interval that
+   * is used to call the updateMessage method.
+   */
+  private restartInterval(): void {
+    clearInterval(this.intervalID);
+    if (this.isGameActive$.getValue()) {
+      this.intervalID = setInterval(() => this.setStep(), 50000 / this.gameSpeed$.getValue());
+    }
+  }
+
+  public setGameStatus(): void {
+    this.isGameActive$.next(!(this.isGameActive$.getValue()));
+    this.restartInterval();
+  }
+
+  private setGameSpeed(speed: number): void {
+    const newSpeed = this.gameSpeed$.getValue() + speed;
+    this.gameSpeed$.next(newSpeed);
+    if (this.gameSpeed$.getValue() < 20) {
+      this.gameSpeed$.next(20);
+    } else if (this.gameSpeed$.getValue() > 500) {
+      this.gameSpeed$.next(500);
+    }
+  }
+
+  public changeTick(value: number): void {
+    this.tick$.next(this.tick$.getValue() + value);
+  }
+
+  public setCellCount(newCellCount: number): void {
+    this.cellCount$.next(newCellCount);
+  }
+
+  public changeCellsAlive(value: number): void {
+    this.cellsAlive$.next(this.cellsAlive$.getValue() + value);
+  }
+
+  public changeCellsCreated(value: number): void {
+    this.cellsCreated$.next(this.cellsCreated$.getValue() + value);
+  }
+
+  public setGridList(newGrid: Alive[][]): void {
+    console.log('just got a new gridList');
+    this.gridList$.next(newGrid);
+  }
+
+  public setBackwardStep(): void {
+    if (this.isGameActive$.getValue()) {
+      this.isGameActive$.next(false);
+      this.restartInterval();
+    }
+    console.log('backwardStepAmount:', this.backwardStepsAmount$.getValue());
+    if (this.backwardStepsAmount$.getValue() > 0) {
+      this.changeBackwardStepsAmount(-1);
+      this.backwardStep$.next();
+    }
+  }
+
+
+  /**
+   * (Don't question good method names or I will haunt you)
+   * @param value
+   * @private
+   */
+  private changeBackwardStepsAmount(value: number): void {
+    this.backwardStepsAmount$.next(this.backwardStepsAmount$.value + value);
+  }
+
+  public setStep(): void {
+    this.step$.next();
+    if (this.backwardStepsAmount$.getValue() < 5) {
+      this.changeBackwardStepsAmount(1);
+    }
+  }
+
+  public setSpeedDown(): void {
+    this.gameSpeed$.getValue() > 100 ? this.setGameSpeed(-100) : this.setGameSpeed(-20);
+    this.restartInterval();
+  }
+
+  public setSpeedUp(): void {
+    this.gameSpeed$.getValue() < 100 ? this.setGameSpeed(20) : this.setGameSpeed(100);
+    this.restartInterval();
+  }
+
+  public setRedo(): void {
+    this.backwardStepsAmount$.next(0);
+    this.tick$.next(0);
+    this.cellsAlive$.next(0);
+    this.cellsCreated$.next(0);
+    this.redo$.next();
+  }
+
+  public setRandomSeed(): void {
+    this.randomSeed$.next();
+  }
+
+  public setImportSession(): void {
+    this.importSession$.next();
+  }
+
+  public setExportSession(): void {
+    this.exportSession$.next();
+  }
+
+  public setExportToken(token: string): void {
+    this.exportToken$.next(token);
+  }
+
+  public setImportToken(token: string): void {
+    this.importToken$.next(token);
+  }
+
+  public getGridList(): Observable<Alive[][]> {
+    return this.gridList$;
+  }
+
+  public getGameStatus(): Observable<boolean> {
+    return this.isGameActive$;
+  }
+
+  public getTick(): Observable<number> {
+    return this.tick$;
+  }
+
+  public getCellCount(): Observable<number> {
+    return this.cellCount$;
+  }
+
+  public getCellsAlive(): Observable<number> {
+    return this.cellsAlive$;
+  }
+
+  public getCellsCreated(): Observable<number> {
+    return this.cellsCreated$;
+  }
+
+  public getGameSpeed(): Observable<number> {
+    return this.gameSpeed$;
+  }
+
+  public getBackwardStep(): Observable<void> {
+    return this.backwardStep$;
+  }
+
+  public getBackwardStepsAmount(): Observable<number> {
+    return this.backwardStepsAmount$;
+  }
+
+  public getStep(): Observable<void> {
+    return this.step$;
+  }
+
+  public getRedo(): Observable<void> {
+    return this.redo$;
+  }
+
+  public getRandomSeed(): Observable<void> {
+    return this.randomSeed$;
+  }
+
+  public getImportSession(): Observable<void> {
+    return this.importSession$;
+  }
+
+  public getExportSession(): Observable<void> {
+    return this.exportSession$;
+  }
+
+  public getExportToken(): Observable<string> {
+    return this.exportToken$;
+  }
+
+  public getImportToken(): Observable<string> {
+    return this.importToken$;
+  }
+}

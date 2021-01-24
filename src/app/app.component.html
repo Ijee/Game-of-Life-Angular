@@ -22,13 +22,13 @@
           </div>
           <div id="navbarMenuHeroA" [ngClass]="{ 'is-active': isNavbar }" class="navbar-menu">
             <div class="navbar-end">
-              <a class="navbar-item" (click)="swapComponent('gamePage')">
+              <a class="navbar-item" routerLink="/game" (click)="swapComponent('gamePage')">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
                 </span>
                 <span>GAME</span>
               </a>
-              <a class="navbar-item" (click)="swapComponent('infoPage')">
+              <a class="navbar-item" routerLink="/info" (click)="swapComponent('infoPage')">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'info']"></fa-icon>
                 </span>
@@ -51,17 +51,12 @@
       </nav>
     </div>
     <!-- Bulma - Hero content -->
-    <div class="hero-body">
+    <div class="hero-body"  [@fadeAnimation]="getRouterOutletState(o)">
       <div class="container is-paddingless">
         <div class="columns box is-fullwidth is-gapless">
-          <div class="column is-12">
-            <app-grid [style.display]="mainComponent === 'gamePage' ? '' : 'none'"
-                      [message]="message"
-                      [import-token]="importToken"
-                      [current-speed]="speed"
-                      (exportToken)="exportSession($event)"></app-grid>
-            <app-info [style.display]="mainComponent === 'infoPage' ? '' : 'none'"></app-info>
-          </div>
+          <main class="column is-12">
+            <router-outlet #o="outlet"></router-outlet>
+          </main>
         </div>
         <!-- Bulma - Notification -->
         <div *ngIf="isExport" class="columns">
@@ -96,53 +91,11 @@
       <div class="container">
         <div class="columns">
           <div class="column is-fullwidth">
-            <app-controller [is-running]="isRunning"
-                            [main-component]="mainComponent"
-                            (send)="delegate($event)"></app-controller>
+            <app-controller [main-component]="mainComponent"></app-controller>
           </div>
         </div>
       </div>
     </footer>
-    <!-- Bulma - Modal -->
-    <div *ngIf="isImport" [ngClass]="isImport ? 'is-active' : 'inactive'" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            <span class="icon">
-              <fa-icon [icon]="['far', 'edit']"></fa-icon>
-            </span>
-            <b>Import</b>
-          </p>
-          <button class="delete" aria-label="close" (click)="isImport = false"></button>
-        </header>
-        <section class="modal-card-body">
-              <textarea [(ngModel)]="importToken"
-                        class="textarea is-primary"
-                        type="text"
-                        placeholder="Paste here"></textarea>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" (click)="importSession()">Import</button>
-          <button class="button" (click)="isImport = false">Cancel</button>
-          <div class="field">
-            <p class="control has-icons-left">
-              <span class="select">
-                <select [ngModel]="selectedScenario" (ngModelChange)="scenarioSelected($event)">
-                  <option value="scenario" selected>Scenario</option>
-                  <option value="gosper">Gosper glider gun</option>
-                  <option value="multiple">Multiple patterns</option>
-                  <option value="chess">Chess board</option>
-                  <option value="mandala">Mandala</option>
-                </select>
-              </span>
-              <span class="icon is-small is-left">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-              </span>
-            </p>
-          </div>
-        </footer>
-      </div>
-    </div>
+    <app-import-modal></app-import-modal>
   </section>
 </div>

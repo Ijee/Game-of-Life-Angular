@@ -17,3 +17,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
 }
+
+router-outlet ~ * {
+  position: static;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}

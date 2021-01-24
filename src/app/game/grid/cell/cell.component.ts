@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Alive} from "../components";
+import {Alive} from '../../../../types';
 
 @Component({
   selector: 'app-cell',

@@ -1,17 +1,17 @@
 <div class="columns is-fullwidth is-gapless">
   <div class="column is-size-7-mobile is-half-mobile">
-    <strong>TICK: {{ currentTick }}</strong>
+    <strong>TICK: {{ gameService.getTick() | async }}</strong>
   </div>
   <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELL COUNT: {{ cellCount }}</strong>
+    <strong>CELL COUNT: {{ gameService.getCellCount() | async }}</strong>
   </div>
   <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELLS ALIVE: {{ cellsAlive }}</strong>
+    <strong>CELLS ALIVE: {{ gameService.getCellsAlive() | async }}</strong>
   </div>
   <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELLS CREATED: {{ cellsCreated }}</strong>
+    <strong>CELLS CREATED: {{ gameService.getCellsCreated() | async }}</strong>
   </div>
   <div class="column is-size-7-mobile is-half-mobile">
-    <strong>SPEED: {{ currentSpeed }} %</strong>
+    <strong>SPEED: {{ gameService.getGameSpeed() | async }} %</strong>
   </div>
 </div>

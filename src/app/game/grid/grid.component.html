@@ -1,8 +1,4 @@
-<app-stats class="box" [current-tick]="currentTick"
-           [cell-count]="cellCount"
-           [cells-alive]="cellsAlive"
-           [cells-created]="cellsCreated"
-           [current-speed]="currentSpeed"></app-stats>
+<app-stats class="box"></app-stats>
 <div class="game-grid columns"
      (mousedown)="isMouseDown = true"
      (mouseup)="isMouseDown = false"
@@ -11,6 +7,6 @@
     <app-cell *ngFor="let isAlive of col"
               [status-obj]="isAlive"
               [is-mouse-down]="isMouseDown"
-              (wasUpdated)="updateCellCount($event)"></app-cell>
+              (wasUpdated)="updateCellStats($event)"></app-cell>
   </div>
 </div>
