@@ -39,7 +39,7 @@ export class GridComponent implements OnInit, OnDestroy {
           this.setCell(i, j, cell.isAlive);
         });
       });
-      console.log('data', data);
+      // console.log('data', data);
       if (!this.rewritingHistory) {
         console.log('data is being updated... checking historyState:');
         if (this.historyState.length >= 5) {
@@ -49,9 +49,9 @@ export class GridComponent implements OnInit, OnDestroy {
           this.historyState.push(data);
         }
       }
-      console.log('historyState;', this.historyState);
+      // console.log('historyState;', this.historyState);
     });
-
+    this.gameService.setAlreadyInitialized();
     this.gameService.getBackwardStep().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.rewritingHistory = true;
       this.manipulateHistory();
@@ -86,6 +86,7 @@ export class GridComponent implements OnInit, OnDestroy {
    */
   cellCalc(): void {
     this.gameService.getGridList().pipe(take(1)).subscribe((data) => {
+      console.log('data length', data.length);
       if (data.length === 0) {
         const tempArr: Alive[][] = [];
         for (let i = 0; i < this.width; i++) {
@@ -100,6 +101,7 @@ export class GridComponent implements OnInit, OnDestroy {
         }
         this.gameService.setGridList(tempArr);
       } else {
+        console.log('yo');
         this.gridList = data;
       }
     });
@@ -166,7 +168,7 @@ export class GridComponent implements OnInit, OnDestroy {
    */
   manipulateHistory(): void {
     console.log('trying to rewrite history');
-    console.log(this.historyState.pop());
+    this.historyState.pop();
     this.gameService.setGridList(this.historyState[this.historyState.length - 1]);
     this.rewritingHistory = false;
     console.log('manipulate history end');

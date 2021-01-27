@@ -2,47 +2,53 @@
   <section class="hero primary-background is-fullheight">
     <!-- Bulma - Hero head -->
     <div class="hero-head">
-      <nav class="navbar">
+      <nav class="navbar is-transparent">
         <div class="container">
           <div class="navbar-brand">
             <a class="navbar-item" style="color: #fff">
               <span class="icon">
                 <fa-icon [icon]="['fas', 'heartbeat']"></fa-icon>
               </span>
-              <span><strong>GAME OF LIFE</strong></span>
+              <span><b>GAME OF LIFE</b></span>
             </a>
             <span [ngClass]="{'is-active': isNavbar}"
-                  class="navbar-burger burger"
+                  class="navbar-burger burger  font-white"
                   data-target="navbarMenuHeroA"
                   (click)="isNavbar = !isNavbar">
-              <span></span>
-              <span></span>
-              <span></span>
+             <span aria-hidden="true"></span>
+             <span aria-hidden="true"></span>
+             <span aria-hidden="true"></span>
             </span>
           </div>
           <div id="navbarMenuHeroA" [ngClass]="{ 'is-active': isNavbar }" class="navbar-menu">
             <div class="navbar-end">
-              <a class="navbar-item" routerLink="/game" (click)="swapComponent('gamePage')">
+              <a class="navbar-item font-white"
+                 routerLink="/game"
+                 (click)="swapComponent('gamePage')">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
                 </span>
-                <span>GAME</span>
+                <span><b>GAME</b></span>
               </a>
-              <a class="navbar-item" routerLink="/info" (click)="swapComponent('infoPage')">
+              <a class="navbar-item font-white"
+                 routerLink="/info"
+                 (click)="swapComponent('infoPage')">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'info']"></fa-icon>
                 </span>
-                <span>INFO</span>
+                <span><b>INFO</b></span>
               </a>
               <span class="navbar-item">
                 <a class="button is-info"
-                   href="https://github.com/Ijee/Game-of-Life-Vue"
+                   href="https://github.com/Ijee/Game-of-Life-Angular"
                    target="_blank"
                    rel="noopener">
                   <span class="icon">
                     <fa-icon [icon]="['fab', 'github']"></fa-icon>
                   </span>
-                  <span>Ijee</span>
+                  <span>
+                    <b>Ijee</b>
+                  </span>
                 </a>
               </span>
             </div>
@@ -51,38 +57,12 @@
       </nav>
     </div>
     <!-- Bulma - Hero content -->
-    <div class="hero-body"  [@fadeAnimation]="getRouterOutletState(o)">
+    <div class="hero-body" [@fadeAnimation]="getRouterOutletState(o)">
       <div class="container is-paddingless">
         <div class="columns box is-fullwidth is-gapless">
           <main class="column is-12">
             <router-outlet #o="outlet"></router-outlet>
           </main>
-        </div>
-        <!-- Bulma - Notification -->
-        <div *ngIf="isExport" class="columns">
-          <div class="column is-6 is-offset-3">
-            <div class="notification">
-              <h6 class="title is-6">
-                <fa-icon [icon]="['far', 'save']"></fa-icon>
-                Export
-              </h6>
-              <button class="delete" (click)="isExport = false"></button>
-              <div class="field has-addons">
-                <div class="control is-expanded">
-                  <input id="copystring"
-                         [(ngModel)]="exportToken"
-                         type="text"
-                         class="input is-info is-rounded"
-                         (focus)="$event.target.select()">
-                </div>
-                <div class="control">
-                  <a class="button is-dark" (click)="toClipboard()">
-                    <fa-icon [icon]="['fas', 'paste']"></fa-icon>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -97,5 +77,6 @@
       </div>
     </footer>
     <app-import-modal></app-import-modal>
+    <app-export-modal></app-export-modal>
   </section>
 </div>

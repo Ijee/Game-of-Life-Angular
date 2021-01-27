@@ -1,10 +1,10 @@
 # Game of Life - Angular
-> John Conway's game of life implementation with angular, bulma and Fontawesome! This was a fun project to learn more about vue, webpack and all the fun stuff you can find on npm.
+> John Conway's game of life implementation with Angular, bulma and Fontawesome! This was a fun project to learn more about vue, webpack and all the fun stuff you can find on npm.
 > It should be fairly easy to strip the components down to a bare bone application and build bomberman, snake or even a maze with it easily.
 > Everything should be decently commented and work but let me know if you find any issues while running the app.
 
 ---
-**Note: this is a direct port of my [Game-of-Life](https://github.com/Ijee/Game-of-Life-Vue) made with vuejs. Courtesy of @TODO
+**Note: this is a near direct port of my [Game-of-Life](https://github.com/Ijee/Game-of-Life-Vue) made with vuejs with some help by @TODO
 
 
 

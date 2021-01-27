@@ -15,10 +15,6 @@ import {takeUntil} from 'rxjs/operators';
   animations: [fadeAnimation]
 })
 export class AppComponent implements OnInit, OnDestroy {
-
-
-  public exportToken: string;
-
   public isNavbar: boolean;
   public isImport: boolean;
   public isExport: boolean;
@@ -37,10 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.gameService.getExportToken().pipe(takeUntil(this.destroyed$)).subscribe((token) => {
-      this.exportToken = token;
-      this.isExport = true;
-    });
+
   }
 
   ngOnDestroy(): void {
@@ -63,19 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (event.code === 'KeyR') {
       this.gameService.setRedo();
     }
-  }
-
-  /**
-   * Copies the text in the #copystring input
-   * to the users clipboard. May not work for
-   * some clients.
-   */
-  toClipboard(): void {
-    this.isExport = false;
-    const copyString = document.querySelector('#copystring') as HTMLInputElement;
-    copyString.setAttribute('type', 'text');
-    copyString.select();
-    document.execCommand('copy');
   }
 
   /**

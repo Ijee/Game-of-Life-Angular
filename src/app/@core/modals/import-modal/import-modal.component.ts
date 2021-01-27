@@ -1,13 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {GameService} from '../services/game.service';
+import {GameService} from '../../services/game.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {far} from '@fortawesome/free-regular-svg-icons';
-import {transition, trigger, useAnimation} from '@angular/animations';
-import {fadeAnimation} from '../animations/fadeAnimation';
 
 @Component({
   selector: 'app-import-modal',
@@ -97,6 +95,7 @@ export class ImportModalComponent implements OnInit, OnDestroy {
   }
 
   importSession(): void {
+    this.gameService.setRedo();
     this.gameService.setImportToken(this.importToken);
     this.showImport = false;
   }

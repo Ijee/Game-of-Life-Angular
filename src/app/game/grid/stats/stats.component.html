@@ -1,17 +1,32 @@
-<div class="columns is-fullwidth is-gapless">
-  <div class="column is-size-7-mobile is-half-mobile">
-    <strong>TICK: {{ gameService.getTick() | async }}</strong>
+<section class="level is-mobile">
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Tick</p>
+      <p class="title" appCountAnimation>{{ gameService.getTick() | async }}</p>
+    </div>
   </div>
-  <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELL COUNT: {{ gameService.getCellCount() | async }}</strong>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Cell Count</p>
+      <p class="title">{{ gameService.getCellCount() | async }}</p>
+    </div>
   </div>
-  <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELLS ALIVE: {{ gameService.getCellsAlive() | async }}</strong>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Cells Alive</p>
+      <p class="title">{{ gameService.getCellsAlive() | async }}</p>
+    </div>
   </div>
-  <div class="column is-size-7-mobile is-half-mobile">
-    <strong>CELLS CREATED: {{ gameService.getCellsCreated() | async }}</strong>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Cells Created</p>
+      <p class="title">{{ gameService.getCellsCreated() | async }}</p>
+    </div>
   </div>
-  <div class="column is-size-7-mobile is-half-mobile">
-    <strong>SPEED: {{ gameService.getGameSpeed() | async }} %</strong>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Speed</p>
+      <p class="title">{{ gameService.getGameSpeed() | async }}%</p>
+    </div>
   </div>
-</div>
+</section>

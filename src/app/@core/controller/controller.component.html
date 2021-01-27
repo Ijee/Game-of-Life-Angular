@@ -1,14 +1,16 @@
 <div class="box">
   <div class="field has-addons has-addons-centered is-marginless">
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="slow down"
+      <button [disabled]="mainComponent !== 'gamePage'" class="button is-outlined" title="slow down"
               (click)="gameService.setSpeedDown()">
         <fa-icon [icon]="['fas', 'backward']"></fa-icon>
       </button>
     </p>
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage' || ((gameService.getBackwardStepsAmount() | async) < 1)" class="button"
+      <button [disabled]="mainComponent !== 'gamePage' || ((gameService.getBackwardStepsAmount() | async) < 1)"
+              class="button is-outlined"
               title="last step"
+              [ngClass]="{'buttonBackwards' : (gameService.getBackwardStepsAmount() | async) < 1}"
               (click)="gameService.setBackwardStep()">
         <fa-icon [icon]="['fas', 'step-backward']"></fa-icon>
         <b> {{ gameService.getBackwardStepsAmount() | async }} </b>
@@ -16,7 +18,7 @@
     </p>
     <p class="control">
       <button [disabled]="mainComponent !== 'gamePage'"
-              [ngClass]="(gameService.getGameStatus() | async) ? 'green' : 'red'"
+              [ngClass]="(gameService.getGameStatus() | async) ? 'is-primary is-light' : 'is-danger is-light'"
               class="button"
               title="play" (click)="gameService.setGameStatus()">
         <fa-icon *ngIf="gameService.getGameStatus() | async" [icon]="['fas', 'stop']"></fa-icon>
@@ -24,25 +26,25 @@
       </button>
     </p>
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="clear grid"
+      <button [disabled]="mainComponent !== 'gamePage'" class="button is-outlined" title="clear grid"
               (click)="gameService.setRedo()">
         <fa-icon [icon]="['fas', 'redo']"></fa-icon>
       </button>
     </p>
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="next step"
+      <button [disabled]="mainComponent !== 'gamePage'" class="button is-outlined" title="next step"
               (click)="gameService.setStep()">
         <fa-icon [icon]="['fas', 'step-forward']"></fa-icon>
       </button>
     </p>
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="speed up"
+      <button [disabled]="mainComponent !== 'gamePage'" class="button is-outlined" title="speed up"
               (click)="gameService.setSpeedUp()">
         <fa-icon [icon]="['fas', 'forward']"></fa-icon>
       </button>
     </p>
     <p class="control">
-      <button [disabled]="mainComponent !== 'gamePage'" class="button" title="random"
+      <button [disabled]="mainComponent !== 'gamePage'" class="button is-outlined" title="random"
               (click)="gameService.setRandomSeed()">
         <span class="icon">
           <fa-icon [icon]="['fas', 'random']"></fa-icon>
@@ -54,7 +56,7 @@
   <div class="field has-addons has-addons-centered is-marginless">
     <p class="control">
       <button [disabled]="mainComponent !== 'gamePage'" class="button" title="import"
-              (click)="gameService.setImportSession()">
+              (click)="gameService.setImportSession(); this.gameService.setGameStatus(false)">
         <span class="icon">
           <fa-icon [icon]="['far', 'edit']"></fa-icon>
         </span>
@@ -63,7 +65,7 @@
     </p>
     <p class="control">
       <button [disabled]="mainComponent !== 'gamePage'" class="button" title="export"
-              (click)="gameService.setExportSession()">
+              (click)="gameService.setExportSession(); this.gameService.setGameStatus(false)">
         <span class="icon">
           <fa-icon [icon]="['far', 'save']"></fa-icon>
         </span>

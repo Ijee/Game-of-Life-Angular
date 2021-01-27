@@ -1,21 +1,25 @@
 <!-- Bulma - Modal -->
-<div [ngClass]="showImport ? 'is-active' : 'inactive'" class="modal">
+<div  class="modal" [ngClass]="showImport ? 'is-active' : 'inactive'">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title">
-            <span class="icon">
-              <fa-icon [icon]="['far', 'edit']"></fa-icon>
-            </span>
-        <b>Import</b>
+        <span class="icon">
+          <fa-icon [icon]="['far', 'edit']"></fa-icon>
+        </span>
+        <label for="importArea">
+          <b> Import</b>
+        </label>
       </p>
       <button class="delete" aria-label="close" (click)="showImport = false"></button>
     </header>
     <section class="modal-card-body">
-              <textarea [(ngModel)]="importToken"
+              <textarea id="importArea"
                         class="textarea is-primary"
                         type="text"
-                        placeholder="Paste here"></textarea>
+                        placeholder="Paste here"
+                        [(ngModel)]="importToken">
+              </textarea>
     </section>
     <footer class="modal-card-foot">
       <button class="button is-success" (click)="importSession()">Import</button>
@@ -33,7 +37,7 @@
               </span>
           <span class="icon is-small is-left">
                 <fa-icon [icon]="['fas', 'list']"></fa-icon>
-              </span>
+          </span>
         </p>
       </div>
     </footer>

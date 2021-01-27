@@ -8,7 +8,6 @@ import {RouterModule} from '@angular/router';
 import {CoreModule} from './@core/core.module';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ImportModalModule} from './@core/import-modal/import-modal.module';
 
 
 @NgModule({
@@ -26,7 +25,6 @@ import {ImportModalModule} from './@core/import-modal/import-modal.module';
     FormsModule,
     FontAwesomeModule,
     CoreModule,
-    ImportModalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

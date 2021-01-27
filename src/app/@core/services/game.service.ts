@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {Alive} from '../../../types';
+import {isUndefined} from 'util';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  private alreadyInitialized: boolean;
   private readonly gridList$: ReplaySubject<Alive[][]>;
   private readonly tick$: BehaviorSubject<number>;
   private readonly cellCount$: BehaviorSubject<number>;
@@ -27,12 +29,16 @@ export class GameService {
   private intervalID: number;
 
   constructor() {
+    this.alreadyInitialized = false;
     this.gridList$ = new ReplaySubject<Alive[][]>(5);
     this.gridList$.next([]);
+    // Stats
     this.tick$ = new BehaviorSubject<number>(0);
     this.cellCount$ = new BehaviorSubject<number>(0);
     this.cellsAlive$ = new BehaviorSubject<number>(0);
     this.cellsCreated$ = new BehaviorSubject<number>(0);
+    // Responsible for controlling the simulation - also used to propagate
+    // events from the controller component
     this.gameSpeed$ = new BehaviorSubject(100);
     this.isGameActive$ = new BehaviorSubject(false);
     this.backwardStep$ = new Subject<void>();
@@ -57,8 +63,12 @@ export class GameService {
     }
   }
 
-  public setGameStatus(): void {
-    this.isGameActive$.next(!(this.isGameActive$.getValue()));
+  public setGameStatus(status?: boolean): void {
+    if (status !== undefined) {
+      this.isGameActive$.next(status);
+    } else {
+      this.isGameActive$.next(!(this.isGameActive$.getValue()));
+    }
     this.restartInterval();
   }
 
@@ -86,6 +96,10 @@ export class GameService {
 
   public changeCellsCreated(value: number): void {
     this.cellsCreated$.next(this.cellsCreated$.getValue() + value);
+  }
+
+  public setAlreadyInitialized(): void {
+    this.alreadyInitialized = true;
   }
 
   public setGridList(newGrid: Alive[][]): void {
@@ -158,6 +172,10 @@ export class GameService {
 
   public setImportToken(token: string): void {
     this.importToken$.next(token);
+  }
+
+  public getAlreadyInitialized(): boolean {
+    return this.alreadyInitialized;
   }
 
   public getGridList(): Observable<Alive[][]> {
