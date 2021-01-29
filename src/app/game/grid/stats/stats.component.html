@@ -2,13 +2,13 @@
   <div class="level-item has-text-centered">
     <div>
       <p class="heading">Tick</p>
-      <p class="title" appCountAnimation>{{ gameService.getTick() | async }}</p>
+      <p class="title">{{ gameService.getTick() | async }}</p>
     </div>
   </div>
   <div class="level-item has-text-centered">
     <div>
       <p class="heading">Cell Count</p>
-      <p class="title">{{ gameService.getCellCount() | async }}</p>
+      <p class="title"  appCountAnimation [newValue]="test">0</p>
     </div>
   </div>
   <div class="level-item has-text-centered">
@@ -20,7 +20,7 @@
   <div class="level-item has-text-centered">
     <div>
       <p class="heading">Cells Created</p>
-      <p class="title">{{ gameService.getCellsCreated() | async }}</p>
+      <p class="title" appCountAnimation [newValue]="gameService.getCellsCreated() | async">0</p>
     </div>
   </div>
   <div class="level-item has-text-centered">
@@ -30,3 +30,4 @@
     </div>
   </div>
 </section>
+<button (click)="increase()">test button</button>

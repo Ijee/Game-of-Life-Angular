@@ -23,23 +23,28 @@ import {
 //   ),
 // ];
 
-export const fadeAnimation =
-  trigger('fadeAnimation', [
-    transition('* => *', [
-      query(':enter', [style({opacity: 0})], {
-        optional: true,
-      }),
-      sequence([
-        query(
-          ':leave',
-          [style({opacity: 1}), animate('0.2s ease', style({ top: 0, opacity: 0}))],
-          {optional: true}
-        ),
-        query(
-          ':enter',
-          [style({opacity: 0}), animate('0.5s', style({opacity: 1}))],
-          {optional: true}
-        ),
-      ]),
-    ]),
-  ]);
+export const fadeAnimation = trigger('fadeAnimation', [
+  transition('* <=> *', [
+    query(':enter, :leave', style({ opacity: 1,  position: 'fixed' }), {
+      optional: true
+    }),
+    group([
+      query(
+        ':enter',
+        [
+          style({ opacity: 0 }),
+          animate('800ms ease-in-out', style({opacity: 1, position: 'relative' , top: '0'}))
+        ],
+        { optional: true }
+      ),
+      query(
+        ':leave',
+        [
+          style({ opacity: 1 }),
+          animate('800ms ease-in-out', style({ opacity: 0 }))
+        ],
+        { optional: true }
+      )
+    ])
+  ])
+]);

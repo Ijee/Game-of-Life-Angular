@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {Alive} from '../../../types';
-import {isUndefined} from 'util';
 
 
 @Injectable({
@@ -15,6 +14,7 @@ export class GameService {
   private readonly cellsAlive$: BehaviorSubject<number>;
   private readonly cellsCreated$: BehaviorSubject<number>;
   private readonly gameSpeed$: BehaviorSubject<number>;
+  private readonly disableController$: BehaviorSubject<boolean>;
   private readonly isGameActive$: BehaviorSubject<boolean>;
   private readonly backwardStep$: Subject<void>;
   private readonly backwardStepsAmount$: BehaviorSubject<number>;
@@ -40,6 +40,7 @@ export class GameService {
     // Responsible for controlling the simulation - also used to propagate
     // events from the controller component
     this.gameSpeed$ = new BehaviorSubject(100);
+    this.disableController$ = new BehaviorSubject<boolean>(false);
     this.isGameActive$ = new BehaviorSubject(false);
     this.backwardStep$ = new Subject<void>();
     this.backwardStepsAmount$ = new BehaviorSubject<number>(0);
@@ -100,6 +101,10 @@ export class GameService {
 
   public setAlreadyInitialized(): void {
     this.alreadyInitialized = true;
+  }
+
+  public setDisableController(disabled: boolean): void {
+    this.disableController$.next(disabled);
   }
 
   public setGridList(newGrid: Alive[][]): void {
@@ -180,6 +185,10 @@ export class GameService {
 
   public getGridList(): Observable<Alive[][]> {
     return this.gridList$;
+  }
+
+  public getDisableController(): Observable<boolean> {
+    return this.disableController$;
   }
 
   public getGameStatus(): Observable<boolean> {

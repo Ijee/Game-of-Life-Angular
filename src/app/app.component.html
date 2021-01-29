@@ -23,16 +23,14 @@
           <div id="navbarMenuHeroA" [ngClass]="{ 'is-active': isNavbar }" class="navbar-menu">
             <div class="navbar-end">
               <a class="navbar-item font-white"
-                 routerLink="/game"
-                 (click)="swapComponent('gamePage')">
+                 routerLink="/game">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
                 </span>
                 <span><b>GAME</b></span>
               </a>
               <a class="navbar-item font-white"
-                 routerLink="/info"
-                 (click)="swapComponent('infoPage')">
+                 routerLink="/info">
                 <span class="icon">
                   <fa-icon [icon]="['fas', 'info']"></fa-icon>
                 </span>
@@ -57,10 +55,10 @@
       </nav>
     </div>
     <!-- Bulma - Hero content -->
-    <div class="hero-body" [@fadeAnimation]="getRouterOutletState(o)">
+    <div class="hero-body">
       <div class="container is-paddingless">
         <div class="columns box is-fullwidth is-gapless">
-          <main class="column is-12">
+          <main [@fadeAnimation]="getRouterOutletState(o)" class="column is-12">
             <router-outlet #o="outlet"></router-outlet>
           </main>
         </div>
@@ -71,7 +69,7 @@
       <div class="container">
         <div class="columns">
           <div class="column is-fullwidth">
-            <app-controller [main-component]="mainComponent"></app-controller>
+            <app-controller></app-controller>
           </div>
         </div>
       </div>

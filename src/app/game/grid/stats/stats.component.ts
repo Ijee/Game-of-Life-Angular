@@ -8,6 +8,13 @@ import {GameService} from '../../../@core/services/game.service';
 })
 export class StatsComponent {
   @Input('cell-count') cellCount: number;
+
+  public test: number;
   constructor(public gameService: GameService) {
+    this.test = 0;
+  }
+
+  increase(): void {
+    this.test += 100;
   }
 }

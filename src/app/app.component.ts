@@ -1,4 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import { Location } from '@angular/common';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
@@ -6,7 +7,7 @@ import {far} from '@fortawesome/free-regular-svg-icons';
 import {GameService} from './@core/services/game.service';
 import {fadeAnimation} from './@core/animations/fadeAnimation';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private readonly destroyed$: Subject<void>;
 
-  constructor(public gameService: GameService,
-              library: FaIconLibrary) {
+  constructor(library: FaIconLibrary, public gameService: GameService, private router: Router, private location: Location) {
     library.addIconPacks(fas, fab, far);
     this.mainComponent = 'gamePage';
 
@@ -33,7 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.router.events.subscribe(() => {
+      if (this.location.path() === '/game') {
+        this.gameService.setDisableController(false);
+      } else {
+        this.gameService.setDisableController(true);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -56,16 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (event.code === 'KeyR') {
       this.gameService.setRedo();
     }
-  }
-
-  /**
-   * Swaps out the current mainCompoment that
-   * is seen on the screen.
-   *
-   * @param {string} component - the new component
-   */
-  swapComponent(component: string): void {
-    this.mainComponent = component;
   }
 
   public getRouterOutletState(outlet): void {

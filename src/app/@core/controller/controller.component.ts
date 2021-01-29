@@ -11,7 +11,6 @@ import {far} from '@fortawesome/free-regular-svg-icons';
   styleUrls: ['./controller.component.scss']
 })
 export class ControllerComponent {
-  @Input('main-component') mainComponent: string;
 
   constructor(public gameService: GameService,
               private library: FaIconLibrary) {
