@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit,} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Alive} from '../../../types';
 import {GameService} from '../../@core/services/game.service';
 import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 @Component({
@@ -20,6 +20,7 @@ export class GridComponent implements OnInit, OnDestroy {
   public isMouseDown: boolean;
 
   private readonly destroyed$: Subject<void>;
+  private isInitialized: boolean;
 
   constructor(public gameService: GameService) {
     this.width = 46;
@@ -27,19 +28,27 @@ export class GridComponent implements OnInit, OnDestroy {
     this.historyState = [];
     this.rewritingHistory = false;
     this.gridList = [];
+    for (let i = 0; i < this.width; i++) {
+      this.gridList[i] = [];
+      for (let j = 0; j < this.height; j++) {
+        this.gridList[i][j] = {isAlive: false};
+      }
+    }
 
     this.destroyed$ = new Subject<void>();
   }
 
   ngOnInit(): void {
-    this.cellCalc();
+    this.gameService.setCellCount(this.width * this.height);
     this.gameService.getGridList().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-      if (data) {
+      if (data.length) {
         data.forEach((column, i) => {
           column.forEach((cell, j) => {
             this.setCell(i, j, cell.isAlive);
           });
         });
+      } else {
+        this.reset();
       }
       // console.log('data', data);
       if (!this.rewritingHistory) {
@@ -53,7 +62,6 @@ export class GridComponent implements OnInit, OnDestroy {
       }
       // console.log('historyState;', this.historyState);
     });
-    this.gameService.setAlreadyInitialized();
     this.gameService.getBackwardStep().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.rewritingHistory = true;
       this.manipulateHistory();
@@ -62,9 +70,6 @@ export class GridComponent implements OnInit, OnDestroy {
     this.gameService.getStep().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.update();
       this.gameService.changeTick(1);
-    });
-    this.gameService.getRedo().pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      this.reset();
     });
     this.gameService.getRandomSeed().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.randomSeed();
@@ -75,6 +80,7 @@ export class GridComponent implements OnInit, OnDestroy {
     this.gameService.getExportSession().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.exportSession();
     });
+    this.isInitialized = true;
   }
 
   ngOnDestroy(): void {
@@ -82,31 +88,25 @@ export class GridComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  onMouseUp(): void {
+    if (this.isMouseDown) {
+      this.isMouseDown = false;
+      this.gameService.setStep(_.cloneDeep(this.gridList));
+    }
+  }
+
   /**
-   * Creates a 2D-Array during runtime for
-   * the website to use for most operations.
+   * Updates the current cell stats on each new tick.
+   *
+   * @param {boolean} bool - boolean based on cell isAlive status
    */
-  cellCalc(): void {
-    this.gameService.getGridList().pipe(take(1)).subscribe((data) => {
-      console.log('data length', data.length);
-      if (data.length === 0) {
-        const tempArr: Alive[][] = [];
-        for (let i = 0; i < this.width; i++) {
-          // TODDO: make loop in ngoninit with gridlist - row 95 / 98
-          // magic - fixes first iteration
-          tempArr[i] = [];
-          this.gridList[i] = [];
-          for (let j = 0; j < this.height; j++) {
-            tempArr[i][j] = {isAlive: false};
-            this.gridList[i][j] = {isAlive: false};
-          }
-        }
-        this.gameService.setGridList(tempArr);
-      } else {
-        this.gridList = [...data];
-      }
-    });
-    this.gameService.setCellCount(this.width * this.height);
+  updateCellStats(bool: boolean): void {
+    if (bool) {
+      this.gameService.changeCellsAlive(1);
+      this.gameService.changeCellsCreated(1);
+    } else {
+      this.gameService.changeCellsAlive(-1);
+    }
   }
 
   /**
@@ -118,11 +118,13 @@ export class GridComponent implements OnInit, OnDestroy {
    * @param {number} y - the y position
    * @param {boolean} alive - the new boolean
    */
-  setCell(x: number, y: number, alive: boolean): void {
+  private setCell(x: number, y: number, alive: boolean): void {
     if (this.gridList[x][y].isAlive !== alive) {
       this.gridList[x][y].isAlive = alive;
 
-      this.updateCellStats(alive);
+      if (this.isInitialized) {
+        this.updateCellStats(alive);
+      }
     }
     // let row = this.gridList[x];
     // row.splice(y, 1, {isAlive: true});
@@ -137,7 +139,7 @@ export class GridComponent implements OnInit, OnDestroy {
    * @param {number} posY - the Y position
    * @return {number} neighbours - amount of neighbours
    */
-  getNeighbours(posX: number, posY: number): number {
+  private getNeighbours(posX: number, posY: number): number {
     let neighbours = 0;
     if (posX <= this.width && posY <= this.height) {
       for (let offsetX = -1; offsetX < 2; offsetX++) {
@@ -167,7 +169,7 @@ export class GridComponent implements OnInit, OnDestroy {
    * this manipulates the historyState array when the backwardsStep
    * is clicked on the controller
    */
-  manipulateHistory(): void {
+  private manipulateHistory(): void {
     console.log('trying to rewrite history');
     this.historyState.pop();
     console.log('historyState - 1', this.historyState[this.historyState.length - 1]);
@@ -180,7 +182,7 @@ export class GridComponent implements OnInit, OnDestroy {
    * The main function that updates the grid
    * every tick based on the game of life rules.
    */
-  update(): void {
+  private update(): void {
     const tempArr: Alive[][] = [];
     for (let i = 0; i < this.width; i++) {
       tempArr[i] = [];
@@ -223,9 +225,9 @@ export class GridComponent implements OnInit, OnDestroy {
    * Resets all gridList cells back to the
    * start value.
    */
-  reset(): void {
-    this.gridList.forEach((col) => {
-      col.forEach((cell) => {
+  private reset(): void {
+    this.gridList.forEach(col => {
+      col.forEach(cell => {
         cell.isAlive = false;
       });
     });
@@ -234,8 +236,8 @@ export class GridComponent implements OnInit, OnDestroy {
   /**
    * Populates and overwrites gridList with cells.
    */
-  randomSeed(): void {
-    this.gameService.setRedo();
+  private randomSeed(): void {
+    this.gameService.reset();
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
         const rand = Math.random();
@@ -256,7 +258,7 @@ export class GridComponent implements OnInit, OnDestroy {
    * like this:
    * '[xPos,yPos],[xPos,yPos]...'.
    */
-  importToken(token: string): void {
+  private importToken(token: string): void {
     this.reset();
     const regex = /\[\d+,\d+\]/gm;
     const tempArr = token.match(regex);
@@ -274,7 +276,7 @@ export class GridComponent implements OnInit, OnDestroy {
    * emits it up to App.vue for the user to copy.
    * Same format as in importToken().
    */
-  exportSession(): void {
+  private exportSession(): void {
     let exportToken = '';
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
@@ -284,19 +286,5 @@ export class GridComponent implements OnInit, OnDestroy {
       }
     }
     this.gameService.setExportToken(exportToken);
-  }
-
-  /**
-   * Updates the current cell stats on each new tick.
-   *
-   * @param {boolean} bool - boolean based on cell isAlive status
-   */
-  updateCellStats(bool: boolean): void {
-    if (bool) {
-      this.gameService.changeCellsAlive(1);
-      this.gameService.changeCellsCreated(1);
-    } else {
-      this.gameService.changeCellsAlive(-1);
-    }
   }
 }

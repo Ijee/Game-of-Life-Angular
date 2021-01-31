@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
     if (event.code === 'ArrowRight') {
-      this.gameService.setStep();
+      this.gameService.addStep();
     } else if (event.code === 'ArrowLeft') {
       this.gameService.setBackwardStep();
     } else if (event.code === 'Space') {
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (event.code === 'NumpadSubtract') {
       this.gameService.setSpeedDown();
     } else if (event.code === 'KeyR') {
-      this.gameService.setRedo();
+      this.gameService.reset();
     }
   }
 

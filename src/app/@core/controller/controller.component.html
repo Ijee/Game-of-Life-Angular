@@ -27,13 +27,13 @@
     </p>
     <p class="control">
       <button [disabled]="this.gameService.getDisableController() | async" class="button is-outlined" title="clear grid"
-              (click)="gameService.setRedo()">
+              (click)="gameService.reset()">
         <fa-icon [icon]="['fas', 'redo']"></fa-icon>
       </button>
     </p>
     <p class="control">
       <button [disabled]="this.gameService.getDisableController() | async" class="button is-outlined" title="next step"
-              (click)="gameService.setStep()">
+              (click)="gameService.addStep()">
         <fa-icon [icon]="['fas', 'step-forward']"></fa-icon>
       </button>
     </p>

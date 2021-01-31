@@ -15,12 +15,12 @@ export const fadeAnimation = trigger('fadeAnimation', [
       {optional: true}
     ),
     sequence([
-      query(':leave', [animate('0.5s ease-out', style({opacity: 0, height: '*'}))], {optional: true}),
+      query(':leave', [animate('0.25s ease-out', style({opacity: 0, height: '*'}))], {optional: true}),
       query(':leave', [style({height: 0})], {optional: true}),
     ]),
     sequence([
       query(':enter', [style({height: '*'})], {optional: true}),
-      query(':enter', [animate('0.5s 0.5s ease-in'), style({opacity: 1})], {optional: true}),
+      query(':enter', [animate('0.25s 0.25s ease-in'), style({opacity: 1})], {optional: true}),
     ])
   ])
 ]);

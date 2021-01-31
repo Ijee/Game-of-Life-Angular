@@ -7,7 +7,6 @@ import {Alive} from '../../../types';
   providedIn: 'root'
 })
 export class GameService {
-  private alreadyInitialized: boolean;
   private readonly gridList$: ReplaySubject<Alive[][]>;
   private readonly tick$: BehaviorSubject<number>;
   private readonly cellCount$: BehaviorSubject<number>;
@@ -19,7 +18,6 @@ export class GameService {
   private readonly backwardStep$: Subject<void>;
   private readonly backwardStepsAmount$: BehaviorSubject<number>;
   private readonly step$: Subject<void>;
-  private readonly redo$: Subject<void>;
   private readonly randomSeed$: Subject<void>;
   private readonly importSession$: Subject<void>;
   private readonly exportSession$: Subject<void>;
@@ -29,7 +27,6 @@ export class GameService {
   private intervalID: number;
 
   constructor() {
-    this.alreadyInitialized = false;
     this.gridList$ = new ReplaySubject<Alive[][]>(5);
     this.gridList$.next([]);
     // Stats
@@ -45,7 +42,6 @@ export class GameService {
     this.backwardStep$ = new Subject<void>();
     this.backwardStepsAmount$ = new BehaviorSubject<number>(0);
     this.step$ = new Subject<void>();
-    this.redo$ = new Subject<void>();
     this.randomSeed$ = new Subject<void>();
     this.importSession$ = new Subject<void>();
     this.exportSession$ = new Subject<void>();
@@ -60,7 +56,7 @@ export class GameService {
   private restartInterval(): void {
     clearInterval(this.intervalID);
     if (this.isGameActive$.getValue()) {
-      this.intervalID = setInterval(() => this.setStep(), 50000 / this.gameSpeed$.getValue());
+      this.intervalID = setInterval(() => this.addStep(), 50000 / this.gameSpeed$.getValue());
     }
   }
 
@@ -99,10 +95,6 @@ export class GameService {
     this.cellsCreated$.next(this.cellsCreated$.getValue() + value);
   }
 
-  public setAlreadyInitialized(): void {
-    this.alreadyInitialized = true;
-  }
-
   public setDisableController(disabled: boolean): void {
     this.disableController$.next(disabled);
   }
@@ -134,7 +126,15 @@ export class GameService {
     this.backwardStepsAmount$.next(this.backwardStepsAmount$.value + value);
   }
 
-  public setStep(): void {
+  public setStep(newGrid: Alive[][]): void {
+    this.setGridList(newGrid);
+    this.changeTick(1);
+    if (this.backwardStepsAmount$.getValue() < 5) {
+      this.changeBackwardStepsAmount(1);
+    }
+  }
+
+  public addStep(): void {
     this.step$.next();
     if (this.backwardStepsAmount$.getValue() < 5) {
       this.changeBackwardStepsAmount(1);
@@ -151,12 +151,12 @@ export class GameService {
     this.restartInterval();
   }
 
-  public setRedo(): void {
+  public reset(): void {
     this.backwardStepsAmount$.next(0);
     this.tick$.next(0);
     this.cellsAlive$.next(0);
     this.cellsCreated$.next(0);
-    this.redo$.next();
+    this.gridList$.next([]);
   }
 
   public setRandomSeed(): void {
@@ -177,10 +177,6 @@ export class GameService {
 
   public setImportToken(token: string): void {
     this.importToken$.next(token);
-  }
-
-  public getAlreadyInitialized(): boolean {
-    return this.alreadyInitialized;
   }
 
   public getGridList(): Observable<Alive[][]> {
@@ -225,10 +221,6 @@ export class GameService {
 
   public getStep(): Observable<void> {
     return this.step$;
-  }
-
-  public getRedo(): Observable<void> {
-    return this.redo$;
   }
 
   public getRandomSeed(): Observable<void> {

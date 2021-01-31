@@ -1,8 +1,8 @@
 <app-stats class="box is-outlined" [isMouseDown]="isMouseDown"></app-stats>
 <div class="game-grid columns"
      (mousedown)="isMouseDown = true"
-     (mouseup)="isMouseDown = false"
-     (mouseleave)="isMouseDown = false">
+     (mouseup)="onMouseUp()"
+     (mouseleave)="onMouseUp()">
   <div *ngFor="let col of gridList" class="game-column">
     <app-cell *ngFor="let isAlive of col"
               [status-obj]="isAlive"

@@ -95,7 +95,7 @@ export class ImportModalComponent implements OnInit, OnDestroy {
   }
 
   importSession(): void {
-    this.gameService.setRedo();
+    this.gameService.reset();
     this.gameService.setImportToken(this.importToken);
     this.showImport = false;
   }
