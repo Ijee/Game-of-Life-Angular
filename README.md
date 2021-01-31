@@ -10,11 +10,11 @@
 
 ## Screenshot
 
-![Angular - Game of Life Promot](https://i.imgur.com/rk6UpoM.png "Promo")
+![Angular - Game of Life Promot](https://i.imgur.com/Jw9tfJC.png "Promo")
 
 ## Live Demo - netlify
 
-[Live Demo](https://golvue.netlify.com/ "netlify demo")
+[Live Demo](https://golangular.netlify.com/ "netlify demo")
 
 ---
 
