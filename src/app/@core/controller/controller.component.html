@@ -43,15 +43,7 @@
         <fa-icon [icon]="['fas', 'forward']"></fa-icon>
       </button>
     </p>
-    <p class="control">
-      <button [disabled]="this.gameService.getDisableController() | async" class="button is-outlined" title="random"
-              (click)="gameService.setRandomSeed()">
-        <span class="icon">
-          <fa-icon [icon]="['fas', 'random']"></fa-icon>
-        </span>
-        <b>Random</b>
-      </button>
-    </p>
+
   </div>
   <div class="field has-addons has-addons-centered is-marginless">
     <p class="control">
@@ -70,6 +62,15 @@
           <fa-icon [icon]="['far', 'save']"></fa-icon>
         </span>
         <b>Export</b>
+      </button>
+    </p>
+    <p class="control">
+      <button [disabled]="this.gameService.getDisableController() | async" class="button is-outlined" title="random"
+              (click)="gameService.setRandomSeed()">
+        <span class="icon">
+          <fa-icon [icon]="['fas', 'random']"></fa-icon>
+        </span>
+        <b>Random</b>
       </button>
     </p>
   </div>

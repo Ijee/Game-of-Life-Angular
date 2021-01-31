@@ -6,13 +6,13 @@ import {takeUntil} from 'rxjs/operators';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {far} from '@fortawesome/free-regular-svg-icons';
-import {fadeAnimation} from '../../animations/fadeAnimation';
+import {modalAnimation} from '../../animations/modalAnimation';
 
 @Component({
   selector: 'app-export-modal',
   templateUrl: './export-modal.component.html',
   styleUrls: ['./export-modal.component.scss'],
-  animations: [fadeAnimation]
+  animations: [modalAnimation]
 })
 export class ExportModalComponent implements OnInit, OnDestroy {
   showExport: boolean;

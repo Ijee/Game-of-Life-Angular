@@ -3,15 +3,12 @@ import {Directive, ElementRef, Input, OnChanges, SimpleChanges} from '@angular/c
 @Directive({
   selector: '[appCountAnimation]'
 })
-export class CountAnimationDirective implements OnChanges{
+export class CountAnimationDirective implements OnChanges {
   @Input() newValue: number;
   @Input() duration: number;
   @Input() disableAnimation: boolean;
 
   private readonly refreshInterval: number;
-  private currentValue: number;
-  private steps: number;
-  private increment: number;
   private intervalID: number;
 
 
@@ -20,22 +17,38 @@ export class CountAnimationDirective implements OnChanges{
     this.disableAnimation = false;
     this.refreshInterval = 30;
 
-
     elementRef.nativeElement.style.color = 'red';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    clearInterval(this.intervalID);
-    this.currentValue = Number(this.elementRef.nativeElement.innerHTML);
-    this.steps = Math.floor(this.duration / this.refreshInterval);
-    this.increment = Math.floor((this.newValue - this.currentValue) / this.steps);
-    if (this.disableAnimation) {
-      this.elementRef.nativeElement.innerHTML = this.newValue;
-    } else {
-      this.intervalID = setTimeout(() => {
-          this.elementRef.nativeElement.innerHTML = this.currentValue + this.increment;
-          console.log('I am actually in the timeout');
-      }, this.steps);
+    if (changes.newValue) {
+      clearInterval(this.intervalID);
+      if (this.disableAnimation) {
+        this.currentValue = this.newValue;
+      } else {
+        const steps = Math.floor(this.duration / this.refreshInterval);
+        const increment = (this.newValue - this.currentValue) / steps;
+        let step = 0;
+        let internalValue = this.currentValue;
+        this.intervalID = setInterval(() => {
+          step++;
+          if (step === steps - 1) {
+            this.currentValue = this.newValue;
+            clearInterval(this.intervalID);
+          } else {
+            internalValue += increment;
+            this.currentValue = Math.floor(internalValue);
+          }
+        }, this.refreshInterval);
+      }
     }
+  }
+
+  private get currentValue(): number {
+    return +this.elementRef.nativeElement.innerHTML;
+  }
+
+  private set currentValue(val: number) {
+    this.elementRef.nativeElement.innerHTML = val;
   }
 }

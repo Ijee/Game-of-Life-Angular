@@ -34,15 +34,17 @@ export class GridComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cellCalc();
     this.gameService.getGridList().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-      data.forEach((column, i) => {
-        column.forEach((cell, j) => {
-          this.setCell(i, j, cell.isAlive);
+      if (data) {
+        data.forEach((column, i) => {
+          column.forEach((cell, j) => {
+            this.setCell(i, j, cell.isAlive);
+          });
         });
-      });
+      }
       // console.log('data', data);
       if (!this.rewritingHistory) {
         console.log('data is being updated... checking historyState:');
-        if (this.historyState.length >= 5) {
+        if (this.historyState.length >= 6) {
           this.historyState.shift();
           this.historyState.push(data);
         } else {
@@ -101,8 +103,7 @@ export class GridComponent implements OnInit, OnDestroy {
         }
         this.gameService.setGridList(tempArr);
       } else {
-        console.log('yo');
-        this.gridList = data;
+        this.gridList = [...data];
       }
     });
     this.gameService.setCellCount(this.width * this.height);
@@ -169,6 +170,7 @@ export class GridComponent implements OnInit, OnDestroy {
   manipulateHistory(): void {
     console.log('trying to rewrite history');
     this.historyState.pop();
+    console.log('historyState - 1', this.historyState[this.historyState.length - 1]);
     this.gameService.setGridList(this.historyState[this.historyState.length - 1]);
     this.rewritingHistory = false;
     console.log('manipulate history end');

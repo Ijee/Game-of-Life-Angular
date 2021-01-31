@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
@@ -20,15 +20,13 @@ export class AppComponent implements OnInit, OnDestroy {
   public isImport: boolean;
   public isExport: boolean;
 
-  public mainComponent: string;
-
 
   private readonly destroyed$: Subject<void>;
 
-  constructor(library: FaIconLibrary, public gameService: GameService, private router: Router, private location: Location) {
+  constructor(library: FaIconLibrary, public gameService: GameService,
+              private router: Router,
+              private location: Location) {
     library.addIconPacks(fas, fab, far);
-    this.mainComponent = 'gamePage';
-
     this.destroyed$ = new Subject<void>();
   }
 
@@ -52,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (event.code === 'ArrowRight') {
       this.gameService.setStep();
     } else if (event.code === 'ArrowLeft') {
-        this.gameService.setBackwardStep();
+      this.gameService.setBackwardStep();
     } else if (event.code === 'Space') {
       this.gameService.setGameStatus();
     } else if (event.code === 'NumpadAdd') {
