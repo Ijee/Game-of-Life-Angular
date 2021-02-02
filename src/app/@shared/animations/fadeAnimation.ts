@@ -7,6 +7,9 @@ import {
   sequence
 } from '@angular/animations';
 
+/**
+ * The animation for the route main route changes. Yes it is more complicated than it should be but that's cool
+ */
 export const fadeAnimation = trigger('fadeAnimation', [
   transition('* => *', [
     query(

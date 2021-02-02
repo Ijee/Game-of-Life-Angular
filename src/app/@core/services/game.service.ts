@@ -12,6 +12,7 @@ export class GameService {
   private readonly cellCount$: BehaviorSubject<number>;
   private readonly cellsAlive$: BehaviorSubject<number>;
   private readonly cellsCreated$: BehaviorSubject<number>;
+  private readonly cellsCreatedHistory: Array<number>;
   private readonly gameSpeed$: BehaviorSubject<number>;
   private readonly disableController$: BehaviorSubject<boolean>;
   private readonly isGameActive$: BehaviorSubject<boolean>;
@@ -34,6 +35,7 @@ export class GameService {
     this.cellCount$ = new BehaviorSubject<number>(0);
     this.cellsAlive$ = new BehaviorSubject<number>(0);
     this.cellsCreated$ = new BehaviorSubject<number>(0);
+    this.cellsCreatedHistory = [];
     // Responsible for controlling the simulation - also used to propagate
     // events from the controller component
     this.gameSpeed$ = new BehaviorSubject(100);

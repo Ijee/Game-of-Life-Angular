@@ -5,7 +5,7 @@ import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {far} from '@fortawesome/free-regular-svg-icons';
 import {GameService} from './@core/services/game.service';
-import {fadeAnimation} from './@core/animations/fadeAnimation';
+import {fadeAnimation} from './@shared/animations/fadeAnimation';
 import {Subject} from 'rxjs';
 import {Router} from '@angular/router';
 

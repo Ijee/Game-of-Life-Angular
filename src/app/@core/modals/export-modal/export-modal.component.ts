@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {far} from '@fortawesome/free-regular-svg-icons';
-import {modalAnimation} from '../../animations/modalAnimation';
+import {modalAnimation} from '../../../@shared/animations/modalAnimation';
 
 @Component({
   selector: 'app-export-modal',

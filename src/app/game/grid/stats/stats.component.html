@@ -1,38 +1,41 @@
-<section class="level is-mobile">
-  <div class="level-item has-text-centered">
-    <div>
+<div class="columns is-fullwidth is-gapless">
+  <div class="column is-size-7-mobile is-half-mobile">
+    <strong class="has-text-centered">
       <p class="heading">Tick</p>
-      <p class="title">{{ gameService.getTick() | async }}</p>
-    </div>
+      <p class="title" >{{ gameService.getTick() | async }}</p>
+    </strong>
   </div>
-  <div class="level-item has-text-centered">
-    <div>
+  <div class="column is-size-7-mobile is-half-mobile">
+    <strong class="has-text-centered">
       <p class="heading">Cell Count</p>
-      <p class="title" appCountAnimation [newValue]="gameService.getCellCount() | async" [disableAnimation]="isMouseDown">
+      <p class="title has-text-danger" appCountAnimation [newValue]="gameService.getCellCount() | async"
+         [disableAnimation]="isMouseDown">
         0
       </p>
-    </div>
+    </strong>
   </div>
-  <div class="level-item has-text-centered">
-    <div>
+  <div class="column is-size-7-mobile is-half-mobile">
+    <strong class="has-text-centered">
       <p class="heading has-text-weight-bold">Cells Alive</p>
-      <p class="title" appCountAnimation [newValue]="gameService.getCellsAlive() | async" [disableAnimation]="isMouseDown">
+      <p class="title has-text-danger" appCountAnimation [newValue]="gameService.getCellsAlive() | async"
+         [disableAnimation]="isMouseDown">
         {{ gameService.getCellsAlive() | async }}
       </p>
-    </div>
+    </strong>
   </div>
-  <div class="level-item has-text-centered">
-    <div>
+  <div class="column is-size-7-mobile is-half-mobile">
+    <strong class="has-text-centered">
       <p class="heading">Cells Created</p>
-      <p class="title" appCountAnimation [newValue]="gameService.getCellsCreated() | async" [disableAnimation]=isMouseDown>
+      <p class="title has-text-danger" appCountAnimation [newValue]="gameService.getCellsCreated() | async"
+         [disableAnimation]=isMouseDown>
         0
       </p>
-    </div>
+    </strong>
   </div>
-  <div class="level-item has-text-centered">
-    <div>
+  <div class="column is-size-7-mobile is-half-mobile">
+    <strong class="has-text-centered">
       <p class="heading">Speed</p>
-      <p class="title">{{ gameService.getGameSpeed() | async }}%</p>
-    </div>
+      <p class="title has-text-danger">{{ gameService.getGameSpeed() | async }}%</p>
+    </strong>
   </div>
-</section>
+</div>

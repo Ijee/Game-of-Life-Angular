@@ -16,8 +16,6 @@ export class CountAnimationDirective implements OnChanges {
     this.duration = 500;
     this.disableAnimation = false;
     this.refreshInterval = 30;
-
-    elementRef.nativeElement.style.color = 'red';
   }
 
   ngOnChanges(changes: SimpleChanges): void {

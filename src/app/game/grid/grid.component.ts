@@ -15,6 +15,7 @@ export class GridComponent implements OnInit, OnDestroy {
   private readonly width: number;
   private readonly height: number;
   private readonly historyState: Array<Alive[][]>;
+  private readonly historyCellsCreated: Array<number>;
   private rewritingHistory: boolean;
   public gridList: Alive[][];
   public isMouseDown: boolean;
@@ -28,6 +29,7 @@ export class GridComponent implements OnInit, OnDestroy {
     this.historyState = [];
     this.rewritingHistory = false;
     this.gridList = [];
+    // init with no cells alive
     for (let i = 0; i < this.width; i++) {
       this.gridList[i] = [];
       for (let j = 0; j < this.height; j++) {
