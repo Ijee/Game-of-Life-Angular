@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  // global hotkeys for the app
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
     if (event.code === 'ArrowRight') {
@@ -60,6 +61,14 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (event.code === 'KeyR') {
       this.gameService.reset();
     }
+  }
+
+  // fixes mobile viewport for mobile chrome, etc.
+  // see: https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  @HostListener('resize', ['$event'])
+  handleReszeEvent(): void {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
   public getRouterOutletState(outlet): void {
