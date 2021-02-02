@@ -15,7 +15,6 @@ export class GridComponent implements OnInit, OnDestroy {
   private readonly width: number;
   private readonly height: number;
   private readonly historyState: Array<Alive[][]>;
-  private readonly historyCellsCreated: Array<number>;
   private rewritingHistory: boolean;
   public gridList: Alive[][];
   public isMouseDown: boolean;
@@ -93,6 +92,7 @@ export class GridComponent implements OnInit, OnDestroy {
   onMouseUp(): void {
     if (this.isMouseDown) {
       this.isMouseDown = false;
+      // forces drawing a line / cells to be a tick in the simulation until the mouse releases
       this.gameService.setStep(_.cloneDeep(this.gridList));
     }
   }
