@@ -37,6 +37,10 @@ export class ExportModalComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  /**
+   * Hides the modal from the client
+   * and tries to copy the export token with the function below
+   */
   exportSession(): void {
     this.toClipboard();
     this.showExport = false;

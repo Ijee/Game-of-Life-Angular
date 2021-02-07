@@ -15,7 +15,13 @@ export class CellComponent {
     this.wasUpdated = new EventEmitter<boolean>();
   }
 
-  reborn(bool: boolean) {
+  /**
+   * checks wether or not the cell should be reborn
+   * as in negates the isAlive property
+   *
+   * @param bool - the boolean that determines the new state for the cell
+   */
+  reborn(bool: boolean): void {
     if (bool) {
       this.statusObj.isAlive = !this.statusObj.isAlive;
       this.wasUpdated.emit(this.statusObj.isAlive);

@@ -45,7 +45,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  // global hotkeys for the app
+  /**
+   *  Global hotkeys for the app
+   */
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
     if (event.code === 'ArrowRight') {
@@ -71,6 +73,13 @@ export class AppComponent implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
+  /**
+   * Is responsible for triggering the animation for the main routing
+   *
+   * @param outlet - the angular outlet to be used
+   *
+   * @return a boolean or an empty string that triggers the animation
+   */
   public getRouterOutletState(outlet): void {
     return outlet.isActivated ? outlet.activatedRoute : '';
   }

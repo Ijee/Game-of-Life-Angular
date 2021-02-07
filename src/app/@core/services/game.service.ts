@@ -8,11 +8,14 @@ import {Alive} from '../../../types';
 })
 export class GameService {
   private readonly gridList$: ReplaySubject<Alive[][]>;
+  private readonly gridHistory: Array<Alive[][]>;
   private readonly tick$: BehaviorSubject<number>;
   private readonly cellCount$: BehaviorSubject<number>;
   private readonly cellsAlive$: BehaviorSubject<number>;
+  private readonly cellsAliveHistory: Array<number>;
   private readonly cellsCreated$: BehaviorSubject<number>;
   private readonly cellsCreatedHistory: Array<number>;
+  private rewritingHistory: boolean;
   private readonly gameSpeed$: BehaviorSubject<number>;
   private readonly disableController$: BehaviorSubject<boolean>;
   private readonly isGameActive$: BehaviorSubject<boolean>;
@@ -30,12 +33,15 @@ export class GameService {
   constructor() {
     this.gridList$ = new ReplaySubject<Alive[][]>(5);
     this.gridList$.next([]);
+    this.gridHistory = [];
     // Stats
     this.tick$ = new BehaviorSubject<number>(0);
     this.cellCount$ = new BehaviorSubject<number>(0);
     this.cellsAlive$ = new BehaviorSubject<number>(0);
+    this.cellsAliveHistory = [0];
     this.cellsCreated$ = new BehaviorSubject<number>(0);
-    this.cellsCreatedHistory = [];
+    this.cellsCreatedHistory = [0];
+    this.rewritingHistory = false;
     // Responsible for controlling the simulation - also used to propagate
     // events from the controller component
     this.gameSpeed$ = new BehaviorSubject(100);
@@ -102,11 +108,13 @@ export class GameService {
   }
 
   public setGridList(newGrid: Alive[][]): void {
-    console.log('just got a new gridList');
+    console.log('____');
+    console.log('just got a new gridList', newGrid);
     this.gridList$.next(newGrid);
   }
 
   public setBackwardStep(): void {
+    // disables auto-play of the simulation
     if (this.isGameActive$.getValue()) {
       this.isGameActive$.next(false);
       this.restartInterval();
@@ -117,7 +125,6 @@ export class GameService {
       this.backwardStep$.next();
     }
   }
-
 
   /**
    * (Don't question good method names or I will haunt you)
@@ -141,6 +148,43 @@ export class GameService {
     if (this.backwardStepsAmount$.getValue() < 5) {
       this.changeBackwardStepsAmount(1);
     }
+  }
+
+  public setHistory(gridList: Alive[][]): void {
+    if (this.gridHistory.length >= 6) {
+      this.gridHistory.shift();
+      this.cellsCreatedHistory.shift();
+      this.cellsAliveHistory.shift();
+      this.gridHistory.push(gridList);
+      console.log('just got a new gridHistory in if case');
+      this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
+      this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+    } else {
+      this.gridHistory.push(gridList);
+      console.log('just got a new gridHistory in else case');
+      this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
+      this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+    }
+    console.log('newest gridHistory element:', this.gridHistory);
+  }
+
+  public setRewritingHistory(newValue: boolean): void {
+    this.rewritingHistory = newValue;
+  }
+
+  /**
+   * this manipulates the gridHistory array when the backwardsStep
+   * is clicked on the controller
+   */
+  public manipulateHistory(): void {
+    console.log('in manipulate history');
+    this.gridHistory.pop();
+    this.setGridList(this.gridHistory[this.gridHistory.length - 1]);
+    this.setRewritingHistory(false);
+    this.cellsCreatedHistory.pop();
+    this.cellsCreated$.next(this.cellsCreatedHistory[this.cellsCreatedHistory.length - 1]);
+    this.cellsAliveHistory.pop();
+    this.cellsAlive$.next(this.cellsAliveHistory[this.cellsAliveHistory.length - 1]);
   }
 
   public setSpeedDown(): void {
@@ -207,6 +251,10 @@ export class GameService {
 
   public getCellsCreated(): Observable<number> {
     return this.cellsCreated$;
+  }
+
+  public getRewritingHistory(): boolean {
+    return this.rewritingHistory;
   }
 
   public getGameSpeed(): Observable<number> {

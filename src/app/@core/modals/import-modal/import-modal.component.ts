@@ -94,10 +94,13 @@ export class ImportModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Hides the modal from the client
+   * and uses the gameService for the grid to react to it
+   */
   importSession(): void {
     this.gameService.reset();
     this.gameService.setImportToken(this.importToken);
     this.showImport = false;
   }
-
 }
