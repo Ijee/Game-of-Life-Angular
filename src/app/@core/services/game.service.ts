@@ -367,7 +367,6 @@ export class GameService {
    * Returns the current cellsCreated
    */
   public getCellsCreated(): Observable<number> {
-    console.log('current cellsCreated:', this.cellsCreated$.getValue());
     return this.cellsCreated$;
   }
 
