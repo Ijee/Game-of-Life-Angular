@@ -11,8 +11,8 @@ const routes: Routes = [
   },
   {
     path: 'info',
-    loadChildren: () => import('./info/info.module').then(m => m.InfoModule),
-    data: { reuse: false, key: 'info' }
+    loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
+    data: { reuse: false, key: 'about' }
   },
   {
     path: '',

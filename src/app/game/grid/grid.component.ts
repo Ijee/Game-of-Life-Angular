@@ -50,12 +50,9 @@ export class GridComponent implements OnInit, OnDestroy {
       } else {
         this.reset();
       }
-      // console.log('data', data);
       if (!this.gameService.getRewritingHistory()) {
-        console.log('setting new history');
         this.gameService.setHistory(data);
       }
-      // console.log('historyState;', this.historyState);
     });
     this.gameService.getBackwardStep().pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.gameService.setRewritingHistory(true);

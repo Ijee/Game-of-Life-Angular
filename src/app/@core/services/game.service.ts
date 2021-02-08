@@ -149,8 +149,6 @@ export class GameService {
    * @param newGrid - the new gridList
    */
   public setGridList(newGrid: Alive[][]): void {
-    console.log('____');
-    console.log('just got a new gridList', newGrid);
     this.gridList$.next(newGrid);
   }
 
@@ -165,7 +163,6 @@ export class GameService {
       this.isGameActive$.next(false);
       this.restartInterval();
     }
-    console.log('backwardStepAmount:', this.backwardStepsAmount$.getValue());
     if (this.backwardStepsAmount$.getValue() > 0) {
       this.changeBackwardStepsAmount(-1);
       this.backwardStep$.next();
@@ -219,12 +216,18 @@ export class GameService {
       this.cellsCreatedHistory.shift();
       this.cellsAliveHistory.shift();
       this.gridHistory.push(gridList);
-      this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
-      this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+      // TODO: this fixes an issue that only happens when the grid component is being initialized
+      //  and would put the the last value twice... (also the if below)
+      if (this.cellsCreatedHistory[this.cellsCreatedHistory.length - 1] !== this.cellsCreated$.getValue()) {
+        this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
+        this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+      }
     } else {
       this.gridHistory.push(gridList);
-      this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
-      this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+      if (this.cellsCreatedHistory[this.cellsCreatedHistory.length - 1] !== this.cellsCreated$.getValue()) {
+        this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
+        this.cellsAliveHistory.push(this.cellsAlive$.getValue());
+      }
     }
   }
 
@@ -242,7 +245,6 @@ export class GameService {
    * when the backwardsStep is called on the controller
    */
   public manipulateHistory(): void {
-    console.log('in manipulate history');
     this.gridHistory.pop();
     this.setGridList(this.gridHistory[this.gridHistory.length - 1]);
     this.setRewritingHistory(false);
@@ -364,6 +366,7 @@ export class GameService {
    * Returns the current cellsCreated
    */
   public getCellsCreated(): Observable<number> {
+    console.log('current cellsCreated:', this.cellsCreated$.getValue());
     return this.cellsCreated$;
   }
 

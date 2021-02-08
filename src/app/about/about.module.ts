@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {InfoComponent} from './info.component';
-import { InfoRoutingModule } from './info-routing.module';
+import {AboutComponent} from './about.component';
+import { AboutRoutingModule } from './about-routing.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-  declarations: [InfoComponent],
+  declarations: [AboutComponent],
     imports: [
         CommonModule,
-        InfoRoutingModule,
+        AboutRoutingModule,
         FontAwesomeModule
     ]
 })
-export class InfoModule { }
+export class AboutModule { }
