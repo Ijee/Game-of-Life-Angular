@@ -16,7 +16,7 @@ export class CellComponent {
   }
 
   /**
-   * checks wether or not the cell should be reborn
+   * Checks whether or not the cell should be reborn
    * as in negates the isAlive property
    *
    * @param bool - the boolean that determines the new state for the cell

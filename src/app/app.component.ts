@@ -31,6 +31,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // sets the controller status based on route so that it is
+    // only available on the game page
     this.router.events.subscribe(() => {
       if (this.location.path() === '/game') {
         this.gameService.setDisableController(false);
@@ -65,10 +67,12 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // fixes mobile viewport for mobile chrome, etc.
-  // see: https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  /**
+   * Fixes mobile viewport for mobile chrome, etc.
+   * See: https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+   */
   @HostListener('resize', ['$event'])
-  handleReszeEvent(): void {
+  handleResizeEvent(): void {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }

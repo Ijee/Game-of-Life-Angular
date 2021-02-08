@@ -13,11 +13,21 @@ export class CountAnimationDirective implements OnChanges {
 
 
   constructor(private elementRef: ElementRef) {
-    this.duration = 500;
+    // the duration in which the 'animation' has to be done
+    this.duration = 300;
     this.disableAnimation = false;
     this.refreshInterval = 30;
   }
 
+  /**
+   * Uses Angular SimpleChanges to trigger the function.
+   * It determines the new steps to show the new number
+   * in increments to make it look like an animation.
+   *
+   * Also deals with negative values
+   *
+   * @param changes - the new values
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.newValue) {
       clearInterval(this.intervalID);
