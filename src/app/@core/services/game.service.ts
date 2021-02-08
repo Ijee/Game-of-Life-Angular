@@ -216,8 +216,9 @@ export class GameService {
       this.cellsCreatedHistory.shift();
       this.cellsAliveHistory.shift();
       this.gridHistory.push(gridList);
-      // TODO: this fixes an issue that only happens when the grid component is being initialized
+      // TODO: this if fixes an issue that only happens when the grid component is being initialized
       //  and would put the the last value twice... (also the if below)
+      //  see if there is another way to fix it
       if (this.cellsCreatedHistory[this.cellsCreatedHistory.length - 1] !== this.cellsCreated$.getValue()) {
         this.cellsCreatedHistory.push(this.cellsCreated$.getValue());
         this.cellsAliveHistory.push(this.cellsAlive$.getValue());
